@@ -1,0 +1,48 @@
+#!/bin/bash
+
+parms=$#
+if [ $parms -lt 1 ]
+then
+    echo "no paraments,with:start|stop|reload"
+    exit 1
+fi
+
+cmd=$1
+
+ngxpid="/usr/local/nginx/logs/nginx.pid"
+
+if [ $cmd == "start" ]
+then
+    n=`pgrep -l nginx`
+    if [ "$n" == '' ]
+    then
+        sudo /usr/local/nginx/sbin/nginx
+        echo "starting nginx..."
+        sleep 0.2
+        if [ -f $ngxpid ];then
+            p=`cat $ngxpid`
+            echo "nginx running at $p"
+        fi
+    else echo "nginx already running"
+    fi
+elif [ $cmd == "stop" ]
+then
+    n=`pgrep -l nginx`
+    if [ "$n" != '' ];then
+        if [ -f $ngxpid ];then
+            pid=`cat $ngxpid`
+            sudo kill $pid
+            echo 'stopping nginx...'
+        fi
+    else
+        echo 'nginx not running'
+    fi
+elif [ $cmd == "reload" ]
+    then
+    sudo /usr/local/nginx/sbin/nginx -s reload
+    echo 'reloading nginx.conf..'
+else
+    echo "unknow command"
+    echo "usage:mngx start|stop|reload"
+fi
+

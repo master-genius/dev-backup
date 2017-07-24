@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ngxpid="/usr/local/nginx/logs/nginx.pid"
+
+if [ -f $ngxpid ]
+then
+pid=`cat $ngxpid`
+sudo kill $pid
+fi
+
+
+

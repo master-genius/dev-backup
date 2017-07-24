@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git --work-tree=/home/git/lonely checkout -f
+
