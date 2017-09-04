@@ -86,4 +86,10 @@ endif
 inoremap ( ()<ESC>i
 inoremap [ []<ESC>i
 inoremap { {}<ESC>i
+inoremap " ""<ESC>i
 "inoremap < <><ESC>i
+
+map <C-n> :NERDTreeToggle<CR>
+
+map <C-p> :tabp<CR>
+map <C-l> :tabn<CR>
