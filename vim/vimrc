@@ -63,9 +63,16 @@ set tabstop=4
 set expandtab
 
 :set t_Co=256
-"set background=dark
-:colorscheme luna-term1
-hi Comment ctermfg=8
+set background=dark
+"let g:lightline = {}
+"let g:lightline.colorscheme = 'neodark'
+"let g:neodark#use_256color = 1
+:colorscheme luna-term-master
+
+"设置当前行高亮
+set cursorline
+
+hi Comment ctermfg=67
 
 "设置自动缩进长度为4格
 set shiftwidth=4
@@ -93,3 +100,8 @@ map <C-n> :NERDTreeToggle<CR>
 
 map <C-p> :tabp<CR>
 map <C-l> :tabn<CR>
+map <C-b> :tabnew<CR>
+
+" 在终端启动vim时，共享NERDTree
+let g:nerdtree_tabs_open_on_console_startup=1
+
