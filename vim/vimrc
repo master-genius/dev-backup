@@ -71,6 +71,7 @@ set background=dark
 
 "设置当前行高亮
 set cursorline
+hi Cursorline cterm=NONE ctermbg=59 ctermfg=NONE
 
 hi Comment ctermfg=67
 
@@ -80,7 +81,7 @@ set shiftwidth=4
 set autoindent
 
 " set no swap file
-setlocal noswapfile
+set noswapfile
 
 "let loaded_matchparen=1
 
@@ -98,8 +99,8 @@ inoremap " ""<ESC>i
 
 map <C-n> :NERDTreeToggle<CR>
 
-map <C-p> :tabp<CR>
-map <C-l> :tabn<CR>
+map <C-u> :tabp<CR>
+map <C-i> :tabn<CR>
 map <C-b> :tabnew<CR>
 
 " 在终端启动vim时，共享NERDTree
