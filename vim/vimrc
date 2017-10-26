@@ -48,6 +48,9 @@ endif
 "set hidden             " Hide buffers when they are abandoned
 set mouse=a		" Enable mouse usage (all modes)
 
+" use in tmux
+set term=screen-256color
+
 " This is Myself
 set number
 set backspace=2
@@ -72,6 +75,9 @@ set background=dark
 "设置当前行高亮
 set cursorline
 hi Cursorline cterm=NONE ctermbg=59 ctermfg=NONE
+
+" for seoul256-light
+" hi Cursorline cterm=NONE ctermbg=59 ctermfg=NONE
 
 hi Comment ctermfg=67
 
