@@ -65,19 +65,20 @@ set cindent
 set tabstop=4
 set expandtab
 
-:set t_Co=256
-set background=dark
+set t_Co=256
+"set background=dark
 "let g:lightline = {}
 "let g:lightline.colorscheme = 'neodark'
 "let g:neodark#use_256color = 1
-:colorscheme luna-term-master
+let g:seoul256_srgb = 1
+colorscheme luna-term-master
 
 "设置当前行高亮
 set cursorline
-hi Cursorline cterm=NONE ctermbg=59 ctermfg=NONE
+"hi Cursorline cterm=NONE ctermbg=59 ctermfg=NONE
 
 " for seoul256-light
-" hi Cursorline cterm=NONE ctermbg=59 ctermfg=NONE
+hi Cursorline cterm=NONE ctermbg=14 ctermfg=NONE
 
 hi Comment ctermfg=67
 
