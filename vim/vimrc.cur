@@ -1,4 +1,6 @@
-" colorscheme seoul256
+" let g:seoul256_srgb = 1
+set background=dark
+colorscheme hybrid
 
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType c set omnifunc=ccomplete#Complete
