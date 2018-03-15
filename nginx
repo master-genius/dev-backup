@@ -1,0 +1,52 @@
+#!/bin/bash
+
+prefix="/peb/nginx1122"
+
+pid_file="$prefix/logs/nginx.pid"
+
+if [ -f "$pid_file" ] ; then
+    nginx_pid=`cat $pid_file`
+fi
+
+nginx_run=`ps -e -o user,comm,args | grep 'root.*nginx.*master'`
+
+start_nginx(){
+    if [ -z "$nginx_run" ] ; then
+        echo 'starting nginx...'
+        sudo $prefix/sbin/nginx
+    else
+        echo 'nginx already running'
+    fi
+}
+
+stop_nginx(){
+    if [ -n "$nginx_pid" ] && [ -n "$nginx_run" ] ; then
+        echo 'stopping nginx...'
+        sudo kill $nginx_pid
+    else
+        echo 'nginx not running'
+    fi
+}
+
+case $1 in
+    'start')
+        start_nginx
+        ;;
+    'stop')
+        stop_nginx
+        ;;
+    'restart')
+        if [ -n "$nginx_run" ] ; then
+            stop_nginx
+            while [ -n "$nginx_run" ] ; do
+                sleep 1
+                nginx_run=`ps -e -o user,comm,args | grep 'root.*nginx.*master'`
+            done
+        fi
+        start_nginx
+        ;;
+    *)
+        echo "usage nginx [start|stop|restart]"
+        ;;
+esac
+
