@@ -1,6 +1,6 @@
 #!/bin/bash
 
-prefix="/peb/php7115"
+prefix="/webrun/php7115"
 
 pid_file="$prefix/var/run/php-fpm.pid"
 

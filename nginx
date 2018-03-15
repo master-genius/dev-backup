@@ -1,6 +1,6 @@
 #!/bin/bash
 
-prefix="/peb/nginx1122"
+prefix="/webrun/nginx-1.12.2"
 
 pid_file="$prefix/logs/nginx.pid"
 
