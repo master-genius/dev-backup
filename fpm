@@ -6,12 +6,20 @@ pid_file="$prefix/var/run/php-fpm.pid"
 
 if [ -f "$pid_file" ] ; then
     fpm_pid=`cat "$pid_file"`
+else
+    fpm_pid=
 fi
-
-php_fpm=`ps -e -o user,pid,ppid,comm,args | grep 'root.*php\-fpm.*master'`
+check_fpm_status(){
+    php_fpm=`ps -e -o user,pid,ppid,comm,args | grep '^root.*php\-fpm.*master'`
+    if [ -n "$php_fpm" ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 start_fpm(){
-    if [ -z "$php_fpm" ] ; then
+    if ! check_fpm_status ; then
         echo 'starting php-fpm...'
         sudo $prefix/sbin/php-fpm
     else
@@ -20,7 +28,7 @@ start_fpm(){
 }
 
 stop_fpm(){
-    if [ -n "$fpm_pid" ] && [ -n "$php_fpm" ] ; then
+    if [ -n "$fpm_pid" ] && check_fpm_status ; then
         echo 'stopping php-fpm...'
         sudo kill $fpm_pid
     else
@@ -36,11 +44,10 @@ case $1 in
         stop_fpm
     ;;
     'restart')
-        if [ -n "$php_fpm" ] ; then
+        if check_fpm_status ; then
             stop_fpm
-            while [ -n "$php_fpm" ] ; do
+            while check_fpm_status ; do
                 sleep 1
-                php_fpm=`ps -e -o user,comm,args | grep 'root.*php\-fpm.*master'`
             done
         fi
         start_fpm

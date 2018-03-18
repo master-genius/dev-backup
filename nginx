@@ -1,17 +1,28 @@
 #!/bin/bash
 
-prefix="/webrun/nginx-1.12.2"
+prefix="/webrun/nginx1.12.2"
 
 pid_file="$prefix/logs/nginx.pid"
 
 if [ -f "$pid_file" ] ; then
     nginx_pid=`cat $pid_file`
+else
+    nginx_pid=
 fi
 
-nginx_run=`ps -e -o user,comm,args | grep 'root.*nginx.*master'`
+nginx_run=
+
+check_nginx_status(){
+    nginx_run=`ps -e -o user,ppid,comm,args | grep '^root.*1.*nginx.*master'`
+    if [ -n "$nginx_run" ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 start_nginx(){
-    if [ -z "$nginx_run" ] ; then
+    if ! check_nginx_status  ; then
         echo 'starting nginx...'
         sudo $prefix/sbin/nginx
     else
@@ -20,7 +31,7 @@ start_nginx(){
 }
 
 stop_nginx(){
-    if [ -n "$nginx_pid" ] && [ -n "$nginx_run" ] ; then
+    if [ -n "$nginx_pid" ] && check_nginx_status ; then
         echo 'stopping nginx...'
         sudo kill $nginx_pid
     else
@@ -36,11 +47,10 @@ case $1 in
         stop_nginx
         ;;
     'restart')
-        if [ -n "$nginx_run" ] ; then
+        if check_nginx_status ; then
             stop_nginx
-            while [ -n "$nginx_run" ] ; do
+            while check_nginx_status ; do
                 sleep 1
-                nginx_run=`ps -e -o user,comm,args | grep 'root.*nginx.*master'`
             done
         fi
         start_nginx
