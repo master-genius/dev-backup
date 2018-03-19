@@ -1,0 +1,23 @@
+#!/bin/bash
+
+call_nginx="/webrun/nginx1.12.2/nginx"
+call_fpm="/webrun/php7115/fpm"
+
+case $1 in
+    'start')
+        $call_fpm start
+        $call_nginx start
+        ;;
+    'stop')
+        $call_nginx  stop
+        $call_fpm  stop
+        ;;
+    'restart')
+        $call_fpm  restart
+        $call_nginx restart
+        ;;
+    *)
+        echo 'usage: wrun [start|stop|restart]'
+        ;;
+esac
+
