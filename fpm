@@ -10,7 +10,7 @@ else
     fpm_pid=
 fi
 check_fpm_status(){
-    php_fpm=`ps -e -o user,pid,ppid,comm,args | grep '^root.*php\-fpm.*master'`
+    php_fpm=`ps -e -o user,pid,ppid,tty,comm,args | grep '^root.*\?.*php\-fpm.*master' | grep -v 'grep'`
     if [ -n "$php_fpm" ] ; then
         return 0
     else
