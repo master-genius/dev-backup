@@ -1,0 +1,23 @@
+ReadTags                = no
+Sort                    = FileName
+ShowStreamErrors        = no
+Mp3IgnoreCRCErrors      = yes
+Repeat                  = yes
+Shuffle                 = no
+AutoNext                = yes
+ShowHiddenFiles         = no
+HideFileExtension       = no
+ShowFormat              = yes
+ShowTime                = IfAvailable
+Theme                 = example_theme
+SavePlaylist            = yes
+SyncPlaylist            = yes
+ASCIILines              = no
+
+TagsCacheSize           = 256
+
+FollowPlayedFile        = yes
+
+CanStartInPlaylist      = yes
+
+PlaylistFullPaths      = no
