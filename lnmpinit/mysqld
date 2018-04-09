@@ -1,0 +1,64 @@
+#!/bin/sh
+
+prefix="/webrun/mariadb"
+
+pid_file="$prefix/var/run/mysqld.pid"
+
+conf_file="$prefix/etc/my.cnf"
+
+if [ -f "$pid_file" ] ; then
+    pid=`sudo cat $pid_file`
+else
+    pid=
+fi
+
+check_mysqld_status(){
+    mysqld_status=`ps -e -o user,pid,comm,args | grep '^mysql.*\?.*mysqld.*mysqld' | grep -v 'grep'`
+    if [ -n "$mysqld_status" ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+start_mysqld(){
+    if ! check_mysqld_status  ; then
+        echo 'starting mysqld...'
+        sudo $prefix/bin/mysqld_safe --defaults-file=$conf_file --nowatch
+    else
+        echo 'mysqld already running'
+    fi
+}
+
+stop_mysqld(){
+    if [ -n "$pid" ] && check_mysqld_status ; then
+        echo 'stopping mysqld...'
+        sudo kill $pid
+    else
+        echo 'mysqld not running'
+    fi
+}
+
+case "$1" in
+    start)
+        start_mysqld
+        ;;
+    stop)
+        stop_mysqld
+        ;;
+    restart)
+        if check_mysqld_status ; then
+            stop_mysqld
+            while check_mysqld_status ; do
+                sleep 1
+            done
+        fi
+        start_mysqld
+        ;;
+    *)
+        echo "usage msqld [start|stop|restart]"
+        ;;
+esac
+
+exit 0
+

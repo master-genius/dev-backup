@@ -1,0 +1,61 @@
+#!/bin/bash
+
+prefix="/webrun/php7115"
+
+pid_file="$prefix/var/run/php-fpm.pid"
+
+if [ -f "$pid_file" ] ; then
+    fpm_pid=`cat "$pid_file"`
+else
+    fpm_pid=
+fi
+check_fpm_status(){
+    php_fpm=`ps -e -o user,pid,ppid,tty,comm,args | grep '^root.*\?.*php\-fpm.*master' | grep -v 'grep'`
+    if [ -n "$php_fpm" ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+start_fpm(){
+    if ! check_fpm_status ; then
+        echo 'starting php-fpm...'
+        $prefix/sbin/php-fpm
+    else
+        echo 'php-fpm already running'
+    fi
+}
+
+stop_fpm(){
+    if [ -n "$fpm_pid" ] && check_fpm_status ; then
+        echo 'stopping php-fpm...'
+        kill $fpm_pid
+    else
+        echo 'php-fpm not running'
+    fi
+}
+
+case "$1" in
+    start)
+        start_fpm
+    ;;
+    stop)
+        stop_fpm
+    ;;
+    restart)
+        if check_fpm_status ; then
+            stop_fpm
+            while check_fpm_status ; do
+                sleep 1
+            done
+        fi
+        start_fpm
+    ;;
+    *)
+        echo "usage fpm [start|stop|restart]"
+    ;;
+esac
+
+exit 0
+

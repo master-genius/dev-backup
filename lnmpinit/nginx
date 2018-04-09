@@ -1,0 +1,62 @@
+#!/bin/sh
+
+prefix="/webrun/nginx1.12.2"
+
+pid_file="$prefix/logs/nginx.pid"
+
+if [ -f "$pid_file" ] ; then
+    nginx_pid=`cat $pid_file`
+else
+    nginx_pid=
+fi
+
+check_nginx_status(){
+    nginx_run=`ps -e -o user,pid,ppid,tty,comm,args | grep '^root.*\?.*nginx.*master' | grep -v 'grep'`
+    if [ -n "$nginx_run" ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+start_nginx(){
+    if ! check_nginx_status  ; then
+        echo 'starting nginx...'
+        $prefix/sbin/nginx
+    else
+        echo 'nginx already running'
+    fi
+}
+
+stop_nginx(){
+    if [ -n "$nginx_pid" ] && check_nginx_status ; then
+        echo 'stopping nginx...'
+        kill $nginx_pid
+    else
+        echo 'nginx not running'
+    fi
+}
+
+case $1 in
+    start)
+        start_nginx
+        ;;
+    stop)
+        stop_nginx
+        ;;
+    restart)
+        if check_nginx_status ; then
+            stop_nginx
+            while check_nginx_status ; do
+                sleep 1
+            done
+        fi
+        start_nginx
+        ;;
+    *)
+        echo "usage nginx [start|stop|restart]"
+        ;;
+esac
+
+exit 0
+
