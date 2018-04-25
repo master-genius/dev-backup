@@ -1,7 +1,11 @@
 " let g:seoul256_srgb = 1
-let g:airline_theme='one'
+set completeopt-=preview
+let g:enable_italic_font=1
+let g:airline_theme='colorsbox'
 set background=dark
-colorscheme hybrid_material
+colorscheme colorsbox-material
+"colorscheme hybrid
+"set background=light
 
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType c set omnifunc=ccomplete#Complete
