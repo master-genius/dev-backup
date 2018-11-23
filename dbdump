@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ $# -eq 0 ] ; then
+    echo 'Error : less db name'
+    exit 1
+fi
+
+WITH_DATA=0
+
+for a in $@ ; do
+    if [ $a = "--data" ] ; then
+        WITH_DATA=1
+        break
+    fi
+done
+
+for d in $@ ; do
+    if [ $a = "--data" ] ; then
+        continue
+    fi
+    if [ $WITH_DATA -ne 0 ] ; then
+        /webrun/mariadb/bin/mysqldump -u master -pmaster2018 "$d" > "$d.sql" --socket=/webrun/mariadb/var/run/mysqld.sock
+    else
+        /webrun/mariadb/bin/mysqldump -u master -pmaster2018 "$d" > "$d.sql" --socket=/webrun/mariadb/var/run/mysqld.sock --insert-ignore
+    fi
+done
+
